@@ -137,7 +137,7 @@ create_base_system() {
     debootstrap \
         --arch=$ARCH \
         --variant=minbase \
-        --include=gpgv,gnupg,apt-transport-https,ca-certificates,locales \
+        --include=gpgv,gnupg,ca-certificates,locales \
         $UBUNTU_CODENAME \
         "$CHROOT" \
         http://archive.ubuntu.com/ubuntu
