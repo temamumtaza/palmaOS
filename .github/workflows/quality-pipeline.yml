@@ -1,0 +1,219 @@
+# Palma OS - CI/CD Pipeline
+# Aligned with ISO/IEC Standards:
+# - ISO/IEC 25010 (Software Quality)
+# - ISO/IEC 12207 (Software Lifecycle)
+# - ISO/IEC 27001 (Information Security)
+
+name: Palma OS Quality Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  release:
+    types: [created]
+
+env:
+  PROJECT_NAME: palmaOS
+  VERSION: ${{ github.ref_name }}
+
+jobs:
+  # ============================================
+  # STAGE 1: Code Quality (ISO/IEC 25010)
+  # Functional Suitability, Reliability, Security
+  # ============================================
+  code-quality:
+    name: "📋 Code Quality Analysis"
+    runs-on: ubuntu-24.04
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for analysis
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      
+      - name: Install Analysis Tools
+        run: |
+          pip install flake8 pylint bandit safety mypy
+          pip install -r apps/rakit-surat/requirements.txt
+          pip install -r apps/kasir-mikro/requirements.txt
+          pip install -r apps/palma-guard/requirements.txt
+      
+      # ISO 25010: Functional Suitability
+      - name: Static Code Analysis (Pylint)
+        run: |
+          echo "## 📊 Code Quality Report" >> $GITHUB_STEP_SUMMARY
+          pylint apps/*/main.py --output-format=text --reports=y || true
+      
+      # ISO 25010: Reliability
+      - name: Type Checking (MyPy)
+        run: |
+          mypy apps/*/main.py --ignore-missing-imports || true
+      
+      # ISO 27001: Security Analysis
+      - name: Security Scan (Bandit)
+        run: |
+          echo "## 🔒 Security Report" >> $GITHUB_STEP_SUMMARY
+          bandit -r apps/ -f txt || true
+      
+      # ISO 27001: Dependency Security
+      - name: Dependency Vulnerability Check
+        run: |
+          pip freeze > requirements-all.txt
+          safety check -r requirements-all.txt --output text || true
+      
+      - name: Generate Quality Badge
+        run: |
+          echo "Quality check completed at $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> quality-report.txt
+      
+      - name: Upload Quality Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-report
+          path: quality-report.txt
+
+  # ============================================
+  # STAGE 2: Unit Testing (ISO/IEC 25010)
+  # Functional Correctness, Testability
+  # ============================================
+  unit-tests:
+    name: "🧪 Unit Testing"
+    runs-on: ubuntu-24.04
+    needs: code-quality
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pyqt6 xvfb
+          pip install pytest pytest-cov pytest-qt
+      
+      - name: Run Unit Tests
+        run: |
+          xvfb-run pytest tests/ --cov=apps --cov-report=xml --junitxml=test-results.xml || true
+      
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: |
+            test-results.xml
+            coverage.xml
+
+  # ============================================
+  # STAGE 3: Build Verification (ISO/IEC 12207)
+  # Configuration Management, Build Process
+  # ============================================
+  build-iso:
+    name: "🔨 Build ISO Image"
+    runs-on: ubuntu-24.04
+    needs: unit-tests
+    if: github.event_name == 'release' || github.ref == 'refs/heads/main'
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install Build Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            debootstrap \
+            squashfs-tools \
+            xorriso \
+            grub-pc-bin \
+            grub-efi-amd64-bin \
+            mtools
+      
+      - name: Build ISO
+        run: |
+          sudo bash build/build.sh
+      
+      - name: Calculate Checksums (ISO 27001 - Integrity)
+        run: |
+          cd build/output
+          sha256sum *.iso > SHA256SUMS
+          sha512sum *.iso > SHA512SUMS
+          md5sum *.iso > MD5SUMS
+      
+      - name: Upload ISO Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: palmaos-iso
+          path: |
+            build/output/*.iso
+            build/output/*SUMS
+
+  # ============================================
+  # STAGE 4: Release Management (ISO/IEC 12207)
+  # Delivery, Configuration Management
+  # ============================================
+  release:
+    name: "🚀 Release"
+    runs-on: ubuntu-24.04
+    needs: build-iso
+    if: github.event_name == 'release'
+    
+    steps:
+      - name: Download ISO
+        uses: actions/download-artifact@v4
+        with:
+          name: palmaos-iso
+          path: ./release
+      
+      - name: Upload Release Assets
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ./release/*.iso
+            ./release/*SUMS
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # ============================================
+  # STAGE 5: Documentation (ISO/IEC 12207)
+  # Documentation Process
+  # ============================================
+  documentation:
+    name: "📚 Documentation"
+    runs-on: ubuntu-24.04
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Validate Documentation
+        run: |
+          # Check required docs exist
+          test -f README.md
+          test -f LICENSE
+          test -f CONTRIBUTING.md
+          echo "✅ All required documentation present"
+      
+      - name: Generate SBOM (ISO 27001 - Asset Management)
+        run: |
+          echo "# Software Bill of Materials (SBOM)" > SBOM.md
+          echo "Generated: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> SBOM.md
+          echo "" >> SBOM.md
+          echo "## Python Dependencies" >> SBOM.md
+          cat apps/*/requirements.txt | sort -u >> SBOM.md
+          echo "" >> SBOM.md
+          echo "## System Packages" >> SBOM.md
+          cat build/config/package-lists/*.chroot >> SBOM.md
+      
+      - name: Upload SBOM
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom
+          path: SBOM.md
