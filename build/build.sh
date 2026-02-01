@@ -108,7 +108,7 @@ install_packages() {
     
     sudo chroot "$CHROOT" apt-get update
     
-    # Install core packages
+    # Install core packages (without OnlyOffice first)
     sudo chroot "$CHROOT" apt-get install -y --no-install-recommends \
         linux-image-generic \
         live-boot \
@@ -120,7 +120,6 @@ install_packages() {
         lightdm-gtk-greeter \
         xorg \
         firefox \
-        onlyoffice-desktopeditors \
         evince \
         thunar \
         mousepad \
@@ -131,12 +130,26 @@ install_packages() {
         python3-pyqt6 \
         sqlite3 \
         fonts-noto \
-        fonts-inter \
         pulseaudio \
         pavucontrol \
         network-manager-gnome \
         sudo \
-        locales
+        locales \
+        wget \
+        gnupg \
+        ca-certificates \
+        libreoffice-writer \
+        libreoffice-calc \
+        libreoffice-impress
+    
+    # Try to install OnlyOffice (optional - requires repo)
+    echo -e "${YELLOW}[*] Attempting OnlyOffice installation...${NC}"
+    sudo chroot "$CHROOT" bash -c '
+        wget -qO - https://download.onlyoffice.com/GPG-KEY-ONLYOFFICE | gpg --dearmor > /usr/share/keyrings/onlyoffice.gpg
+        echo "deb [signed-by=/usr/share/keyrings/onlyoffice.gpg] https://download.onlyoffice.com/repo/debian squeeze main" > /etc/apt/sources.list.d/onlyoffice.list
+        apt-get update
+        apt-get install -y onlyoffice-desktopeditors || echo "OnlyOffice installation failed, using LibreOffice"
+    ' || echo -e "${YELLOW}[!] OnlyOffice skipped, LibreOffice installed as fallback${NC}"
     
     # Set locale to Indonesian
     sudo chroot "$CHROOT" locale-gen id_ID.UTF-8
