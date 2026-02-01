@@ -1,0 +1,7 @@
+[Theme]
+Name=Palma Glass
+Comment=Modern theme for Palma OS with Tropical Green aesthetics
+Encoding=UTF-8
+GtkTheme=Palma-Glass
+IconTheme=Papirus
+CursorTheme=Adwaita

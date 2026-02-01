@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Palma Guard
+Name[id]=Palma Guard
+Comment=Security & Anti-Virus Tool
+Comment[id]=Keamanan flashdisk dan anti-virus lokal
+Exec=python3 /opt/palma-apps/palma-guard/main.py
+Icon=security-high
+Terminal=false
+Type=Application
+Categories=System;Security;
+Keywords=antivirus;keamanan;flashdisk;virus;scan;

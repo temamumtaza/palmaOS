@@ -1,0 +1,365 @@
+/* 
+ * Palma Glass - GTK Theme for Palma OS
+ * Based on "Tropical Modern" design philosophy
+ * Colors: Palma Green #009B77, Golden Palm #FFD700
+ */
+
+/* Global styles */
+* {
+    -gtk-icon-style: regular;
+}
+
+/* Window decorations */
+window {
+    background-color: #f5f5f5;
+}
+
+window.background {
+    background-color: #f5f5f5;
+}
+
+/* Header bars */
+headerbar {
+    background: linear-gradient(to bottom, #009B77, #007B5F);
+    color: white;
+    border: none;
+    padding: 6px 8px;
+    min-height: 42px;
+}
+
+headerbar .title {
+    color: white;
+    font-weight: bold;
+}
+
+headerbar button {
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    border-radius: 4px;
+    padding: 4px 8px;
+}
+
+headerbar button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Buttons */
+button {
+    background: linear-gradient(to bottom, #009B77, #008B6A);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 16px;
+    font-weight: 500;
+    transition: all 200ms ease;
+}
+
+button:hover {
+    background: linear-gradient(to bottom, #00AB87, #009B77);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+button:active {
+    background: linear-gradient(to bottom, #007B5F, #006B52);
+}
+
+button:disabled {
+    background-color: #cccccc;
+    color: #888888;
+}
+
+/* Suggested action button (primary) */
+button.suggested-action {
+    background: linear-gradient(to bottom, #FFD700, #E6C200);
+    color: #333333;
+}
+
+button.suggested-action:hover {
+    background: linear-gradient(to bottom, #FFE033, #FFD700);
+}
+
+/* Destructive action button */
+button.destructive-action {
+    background: linear-gradient(to bottom, #dc3545, #c82333);
+    color: white;
+}
+
+/* Entry fields */
+entry {
+    background-color: white;
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    padding: 8px 12px;
+    transition: border-color 200ms ease;
+}
+
+entry:focus {
+    border-color: #009B77;
+    box-shadow: 0 0 0 2px rgba(0, 155, 119, 0.2);
+}
+
+/* Text areas */
+textview {
+    background-color: white;
+}
+
+textview text {
+    background-color: white;
+}
+
+/* Lists and trees */
+treeview {
+    background-color: white;
+}
+
+treeview:selected {
+    background-color: #009B77;
+    color: white;
+}
+
+treeview:hover {
+    background-color: rgba(0, 155, 119, 0.1);
+}
+
+/* Sidebar */
+.sidebar {
+    background-color: #f0f0f0;
+    border-right: 1px solid #dddddd;
+}
+
+.sidebar row:selected {
+    background-color: #009B77;
+    color: white;
+}
+
+/* Notebooks (tabs) */
+notebook {
+    background-color: white;
+}
+
+notebook > header {
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #dddddd;
+}
+
+notebook > header > tabs > tab {
+    padding: 8px 16px;
+    border: none;
+    background-color: transparent;
+}
+
+notebook > header > tabs > tab:checked {
+    background-color: white;
+    border-bottom: 3px solid #009B77;
+    color: #009B77;
+}
+
+notebook > header > tabs > tab:hover:not(:checked) {
+    background-color: rgba(0, 155, 119, 0.1);
+}
+
+/* Scrollbars */
+scrollbar {
+    background-color: transparent;
+}
+
+scrollbar slider {
+    background-color: rgba(0, 155, 119, 0.5);
+    border-radius: 10px;
+    min-width: 8px;
+    min-height: 8px;
+}
+
+scrollbar slider:hover {
+    background-color: rgba(0, 155, 119, 0.7);
+}
+
+/* Progress bars */
+progressbar > trough {
+    background-color: #e0e0e0;
+    border-radius: 5px;
+}
+
+progressbar > trough > progress {
+    background: linear-gradient(to right, #009B77, #00AB87);
+    border-radius: 5px;
+}
+
+/* Switches */
+switch {
+    background-color: #cccccc;
+    border-radius: 12px;
+}
+
+switch:checked {
+    background-color: #009B77;
+}
+
+switch slider {
+    background-color: white;
+    border-radius: 10px;
+}
+
+/* Checkboxes and radio buttons */
+checkbutton check,
+radiobutton radio {
+    background-color: white;
+    border: 2px solid #cccccc;
+    border-radius: 4px;
+}
+
+checkbutton check:checked,
+radiobutton radio:checked {
+    background-color: #009B77;
+    border-color: #009B77;
+    color: white;
+}
+
+radiobutton radio {
+    border-radius: 50%;
+}
+
+/* Menus */
+menu {
+    background-color: white;
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 4px 0;
+}
+
+menu menuitem {
+    padding: 8px 16px;
+}
+
+menu menuitem:hover {
+    background-color: rgba(0, 155, 119, 0.1);
+}
+
+menu menuitem:selected {
+    background-color: #009B77;
+    color: white;
+}
+
+/* Popovers */
+popover {
+    background-color: white;
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Tooltips */
+tooltip {
+    background-color: #333333;
+    color: white;
+    border-radius: 4px;
+    padding: 4px 8px;
+}
+
+/* Info bars */
+infobar {
+    border-radius: 5px;
+}
+
+infobar.info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+infobar.warning {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+infobar.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Dialogs */
+dialog {
+    background-color: #f5f5f5;
+}
+
+messagedialog {
+    background-color: #f5f5f5;
+}
+
+/* Spinner */
+spinner {
+    color: #009B77;
+}
+
+/* Links */
+label.link,
+*:link {
+    color: #009B77;
+}
+
+label.link:hover,
+*:link:hover {
+    color: #007B5F;
+}
+
+/* Selection */
+selection {
+    background-color: #009B77;
+    color: white;
+}
+
+/* File chooser */
+filechooser placessidebar {
+    background-color: #f5f5f5;
+}
+
+filechooser placessidebar row:selected {
+    background-color: #009B77;
+    color: white;
+}
+
+/* Calendar */
+calendar {
+    background-color: white;
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+}
+
+calendar:selected {
+    background-color: #009B77;
+    color: white;
+}
+
+/* Level bar */
+levelbar > trough {
+    background-color: #e0e0e0;
+    border-radius: 3px;
+}
+
+levelbar > trough > block.filled {
+    background-color: #009B77;
+    border-radius: 3px;
+}
+
+/* Scale (slider) */
+scale > trough {
+    background-color: #e0e0e0;
+    border-radius: 3px;
+}
+
+scale > trough > highlight {
+    background-color: #009B77;
+    border-radius: 3px;
+}
+
+scale > trough > slider {
+    background-color: white;
+    border: 2px solid #009B77;
+    border-radius: 50%;
+}
+
+/* Separator */
+separator {
+    background-color: #dddddd;
+}

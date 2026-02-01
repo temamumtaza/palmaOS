@@ -1,0 +1,90 @@
+# Core packages for Palma OS
+# Desktop Environment
+xfce4
+xfce4-goodies
+xfce4-terminal
+thunar
+thunar-archive-plugin
+mousepad
+ristretto
+file-roller
+
+# Display Manager
+lightdm
+lightdm-gtk-greeter
+lightdm-gtk-greeter-settings
+
+# System
+linux-image-generic
+live-boot
+systemd-sysv
+sudo
+locales
+console-setup
+keyboard-configuration
+
+# Network
+network-manager
+network-manager-gnome
+wpasupplicant
+
+# Audio
+pulseaudio
+pavucontrol
+alsa-utils
+
+# Graphics
+xorg
+xserver-xorg-video-all
+
+# Fonts
+fonts-noto
+fonts-noto-cjk
+fonts-inter
+fonts-liberation
+
+# Office Suite
+onlyoffice-desktopeditors
+evince
+simple-scan
+
+# Internet
+firefox
+curl
+wget
+
+# Python (for Palma Apps)
+python3
+python3-pip
+python3-venv
+python3-pyqt6
+python3-pyqt6.qtsvg
+
+# Database
+sqlite3
+libsqlite3-dev
+
+# Utilities
+gnome-calculator
+gnome-disk-utility
+gparted
+htop
+neofetch
+zip
+unzip
+p7zip-full
+
+# Indonesian Input
+ibus
+ibus-gtk3
+
+# Printing
+cups
+system-config-printer
+
+# Power Management
+xfce4-power-manager
+
+# Memory Optimization
+zram-tools
+earlyoom

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Rakit Surat Pro
+Name[id]=Rakit Surat Pro
+Comment=Template Surat Resmi Indonesia
+Comment[id]=Buat surat resmi dengan cepat
+Exec=python3 /opt/palma-apps/rakit-surat/main.py
+Icon=accessories-text-editor
+Terminal=false
+Type=Application
+Categories=Office;
+Keywords=surat;template;sk;undangan;kwitansi;

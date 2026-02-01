@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Kasir Mikro
+Name[id]=Kasir Mikro
+Comment=Point of Sale untuk UMKM
+Comment[id]=Kasir digital sederhana untuk warung dan toko
+Exec=python3 /opt/palma-apps/kasir-mikro/main.py
+Icon=accessories-calculator
+Terminal=false
+Type=Application
+Categories=Office;Finance;
+Keywords=kasir;pos;toko;warung;transaksi;
