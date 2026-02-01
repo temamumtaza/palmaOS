@@ -123,7 +123,11 @@ install_packages() {
     
     CHROOT="$OUTPUT_DIR/chroot"
     
-    sudo chroot "$CHROOT" apt-get update
+    # Remount /dev to ensure device nodes are available
+    sudo mount --bind /dev "$CHROOT/dev" 2>/dev/null || true
+    sudo mount --bind /dev/pts "$CHROOT/dev/pts" 2>/dev/null || true
+    
+    sudo chroot "$CHROOT" apt-get update || true
     
     # Install core packages (without OnlyOffice first)
     sudo chroot "$CHROOT" apt-get install -y --no-install-recommends \
