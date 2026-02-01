@@ -13,6 +13,7 @@ on:
     branches: [main]
   release:
     types: [created]
+  workflow_dispatch:  # Manual trigger for ISO build
 
 env:
   PROJECT_NAME: palmaOS
@@ -116,12 +117,13 @@ jobs:
   # ============================================
   # STAGE 3: Build Verification (ISO/IEC 12207)
   # Configuration Management, Build Process
+  # NOTE: Requires self-hosted runner with sudo privileges
   # ============================================
   build-iso:
     name: "🔨 Build ISO Image"
-    runs-on: ubuntu-24.04
+    runs-on: self-hosted  # Requires self-hosted runner with sudo access
     needs: unit-tests
-    if: github.event_name == 'release' || github.ref == 'refs/heads/main'
+    if: github.event_name == 'workflow_dispatch'  # Manual trigger only
     
     steps:
       - uses: actions/checkout@v4
