@@ -81,12 +81,24 @@ configure_chroot() {
     
     CHROOT="$OUTPUT_DIR/chroot"
     
+    # Create essential device nodes if missing
+    sudo mkdir -p "$CHROOT/dev"
+    sudo mknod -m 666 "$CHROOT/dev/null" c 1 3 2>/dev/null || true
+    sudo mknod -m 666 "$CHROOT/dev/zero" c 1 5 2>/dev/null || true
+    sudo mknod -m 666 "$CHROOT/dev/random" c 1 8 2>/dev/null || true
+    sudo mknod -m 666 "$CHROOT/dev/urandom" c 1 9 2>/dev/null || true
+    sudo mknod -m 666 "$CHROOT/dev/tty" c 5 0 2>/dev/null || true
+    sudo mknod -m 600 "$CHROOT/dev/console" c 5 1 2>/dev/null || true
+    
     # Mount necessary filesystems
     sudo mount --bind /dev "$CHROOT/dev"
+    sudo mount --bind /dev/pts "$CHROOT/dev/pts" 2>/dev/null || true
     sudo mount --bind /run "$CHROOT/run"
-    sudo chroot "$CHROOT" mount none -t proc /proc
-    sudo chroot "$CHROOT" mount none -t sysfs /sys
-    sudo chroot "$CHROOT" mount none -t devpts /dev/pts
+    sudo mount -t proc proc "$CHROOT/proc"
+    sudo mount -t sysfs sysfs "$CHROOT/sys"
+    
+    # Copy DNS config
+    sudo cp /etc/resolv.conf "$CHROOT/etc/resolv.conf"
     
     # Set hostname
     echo "palmaos" | sudo tee "$CHROOT/etc/hostname"
@@ -97,6 +109,11 @@ deb http://archive.ubuntu.com/ubuntu $UBUNTU_CODENAME main restricted universe m
 deb http://archive.ubuntu.com/ubuntu $UBUNTU_CODENAME-updates main restricted universe multiverse
 deb http://archive.ubuntu.com/ubuntu $UBUNTU_CODENAME-security main restricted universe multiverse
 EOF
+    
+    # Install essential packages first (gpgv for apt signature verification)
+    echo -e "${YELLOW}[*] Installing essential packages...${NC}"
+    sudo chroot "$CHROOT" apt-get update --allow-insecure-repositories || true
+    sudo chroot "$CHROOT" apt-get install -y --allow-unauthenticated gpgv gnupg apt-transport-https ca-certificates
     
     echo -e "${GREEN}[✓] Chroot configured${NC}"
 }
